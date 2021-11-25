@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"flag"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/alex-orkuma/greenlight/internal/data"
@@ -45,6 +46,7 @@ type application struct {
 	logger *jsonlog.Logger
 	models data.Models
 	mailer mailer.Mailer
+	wg     sync.WaitGroup
 }
 
 func main() {
@@ -67,10 +69,10 @@ func main() {
 
 	// Smtp server configurations
 	flag.StringVar(&cfg.smtp.host, "smtp-host", "smtp.mailtrap.io", "SMTP Host")
-	flag.IntVar(&cfg.smtp.port, "smtp-port", 25, "SMTP Port")
+	flag.IntVar(&cfg.smtp.port, "smtp-port", 2525, "SMTP Port")
 	flag.StringVar(&cfg.smtp.username, "smtp-username", "13c14da9530969", "SMTP Username")
 	flag.StringVar(&cfg.smtp.password, "smtp-password", "ccd60bccb5b7fa", "SMTP Password")
-	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "Hash Dynamics <alex-o@hashdynamics.io>", "SMTP sender")
+	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "Hash Dynamcis <no-reply@hashdynamics.io>", "SMTP sender")
 	flag.Parse()
 
 	logger := jsonlog.New(os.Stdout, jsonlog.LevelInfo)
